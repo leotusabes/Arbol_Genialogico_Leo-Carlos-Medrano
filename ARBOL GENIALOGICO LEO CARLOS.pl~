@@ -1,0 +1,139 @@
+%ARBOL GENEALOGICO de LEO CARLOS MEDRANO ADUVIRI
+
+%VARONES
+%varon(x): x es varon
+varon(mauricio).
+varon(leandro).
+varon(leonardo).
+varon(lino).
+varon(cristobal).
+varon(emilio).
+varon(francis).
+varon(willian).
+varon(gilberto).
+varon(orlando).
+varon(eddy).
+varon(leo_carlos).
+varon(alejandro).
+varon(gonzalo).
+varon(alvaro).
+varon(javier).
+varon(miguel).
+varon(ivan).
+varon(james).
+varon(gualberto).
+varon(juan_carlos).
+%MUJERES
+%mujer(x): x es mujer
+mujer(miguelina).
+mujer(catalina).
+mujer(daria).
+mujer(maria).
+mujer(tomasina).
+mujer(amalia).
+mujer(quenia).
+mujer(sandra).
+mujer(nora).
+mujer(senovia).
+mujer(doris).
+mujer(yolanda).
+mujer(gabriela).
+mujer(jhanneth).
+mujer(quenia).
+mujer(sandra).
+mujer(erlinda).
+mujer(rucia).
+mujer(jhoselin).
+
+
+%relacion de padre
+%padre(x,y): x es padre de y
+padre(mauricio,leonardo).
+padre(mauricio,lino).
+padre(mauricio,cristobal).
+padre(mauricio,maria).
+padre(mauricio,amalia).
+padre(mauricio,tomasina).
+padre(leandro,daria).
+padre(lino,alejandro).
+padre(lino,alvaro).
+padre(lino,gonzalo).
+padre(lino,rucia).
+padre(lino,erlinda).
+padre(lino,jhoselin).
+padre(cristobal,emilio).
+padre(cristobal,gilberto).
+padre(cristobal,francis).
+padre(cristobal,willian).
+padre(cristobal,doris).
+padre(cristobal,yolanda).
+padre(leonardo,gabriela).
+padre(leonardo,jhanneth).
+padre(leonardo,orlando).
+padre(leonardo,leo_carlos).
+padre(leonardo,eddy).
+
+%relacion de madre
+%madre(x,y): x es madre de y
+madre(miguelina,tomasina).
+madre(miguelina,lino).
+madre(miguelina,cristobal).
+madre(miguelina,leonardo).
+madre(miguelina,maria).
+madre(miguelina,amalia).
+madre(catalina,daria).
+madre(daria,orlando).
+madre(daria,jhanneth).
+madre(daria,leo_carlos).
+madre(daria,eddy).
+madre(daria,gabriela).
+madre(tomasina,nora).
+madre(tomasina,senovia).
+madre(tomasina,javier).
+madre(tomasina,miguel).
+madre(tomasina,ivan).
+madre(amalia,juan_carlos).
+madre(amalia,gualberto).
+madre(amalia,quenia).
+madre(amalia,sandra).
+
+
+%REGLAS
+diferente(X,Y):-not(X=Y).
+%abuelo(X,Y): Xes abuelo dde Y.
+abuelo(X,Y):-padre(X,Z),((padre(Z,Y));(madre(Z,Y))).
+
+%abuela
+abuela(X,Y):-madre(X,Z),((padre(Z,Y));(madre(Z,Y))).
+
+%hijo(x,y):x es hijo de y
+hijo(X,Y):-varon(X),(padre(Y,X);madre(Y,X)).
+
+%hija(x,y):x es hija de y
+hija(X,Y):-mujer(X),(padre(Y,X);madre(Y,X)).
+
+%tio(X,Y):x es tio de y
+tio(X,Y):-varon(X),((padre(P,Y),hermano(X,P);madre(M,Y),hermano(X,M));(padre(X,M2),madre(AU,M2),(hermana(AU,M1),madre(M1,Y);hermana(AU,P1),padre(P1,Y)))).
+%tio(X,Y):-varon(X),(sobrina(Y,X);sobrino(Y,X)).
+
+%tia
+tia(X,Y):-mujer(X),((padre(P,Y),hermana(X,P);madre(M,Y),hermana(X,M));(madre(X,M2),padre(AU,M2),(hermano(AU,M1),madre(M1,Y);hermano(AU,P1),padre(P1,Y)))).
+%primo(X,Y): X Es primo de Y
+primo(X,Y):-(padre(Z,Y);madre(Z,X)),(padre(Z1,Y);madre(Z1,Y)),(hermana(Z,Z1);hermana(Z,Z1)),varon(X),diferente(X,Y).
+%prima(X,Y): X Es prima de Y
+prima(X,Y):-(padre(Z,Y);madre(Z,X)),(padre(Z1,Y);madre(Z1,Y)),(hermana(Z,Z1);hermana(Z,Z1)),mujer(X),diferente(X,Y).
+
+%sobrino(X,Y) : X ES SOBRINO DE Y
+sobrino(X,Y):-hijo(X,P),(hermano(P,Y);hermana(P,Y)).
+
+%sobrina (X,Y): X ES SOBRINA DE Y
+% sobrina(X,Y):-hija(X,P),(hermano(P,Y);hermana(P,Y)),((madre(Y,HA),mujer(Y),padre(Z1,HA));(varon(Y),padre(Y,HB),madre(Z2,HB))).
+sobrina(X,Y):-hija(X,P),(hermano(P,Y);hermana(P,Y)).
+
+%hermano(x,y): x es hermano de y
+hermano(X,Y):-padre(Z,X),padre(Z,Y),madre(Z1,X),madre(Z1,Y),not(X=Y),varon(X).
+
+%hermana
+hermana(X,Y):-padre(Z,X),padre(Z,Y),madre(Z1,X),madre(Z1,Y),not(X=Y),mujer(X).
+
+
